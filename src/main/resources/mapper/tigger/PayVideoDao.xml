@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.tigger.dao.PayVideoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.tigger.entity.PayVideoEntity" id="payVideoMap">
+        <result property="id" column="id"/>
+        <result property="cid" column="cid"/>
+        <result property="point" column="point"/>
+        <result property="fjId" column="fj_id"/>
+        <result property="price" column="price"/>
+        <result property="sales" column="sales"/>
+        <result property="introduce" column="introduce"/>
+        <result property="showStatus" column="show_status"/>
+        <result property="homeShow" column="home_show"/>
+        <result property="showStatus" column="show_status"/>
+        <result property="videoId" column="video_id"/>
+    </resultMap>
+    <select id="selectPayVideoVo" resultType="io.renren.modules.tigger.entity.vo.PayVideoVo">
+        SELECT a_src,ps_pay_video.`home_show`,ps_pay_video.`id`,ps_pay_video.`point`,ps_pay_video.cid,ps_organ.`username` AS organname
+        ,ps_pay_video.`introduce`,ps_pay_video.`price`,ps_pay_video.`video_id`,ps_pay_video.fj_id,ps_pay_video.oid,
+        ps_pay_video.share_point,ps_pay_video.by_point,ps_pay_video.by_point_father
+        FROM ps_pay_video  LEFT JOIN ps_accessory  ON fj_id = ps_accessory.id
+        LEFT JOIN ps_organ ON ps_organ.id = ps_pay_video.`oid`
+        WHERE ps_pay_video.`show_status` = 1 AND ps_accessory.`show_status` =1
+
+        ORDER BY ps_pay_video.`home_show` DESC
+</select>
+    <select id="selectCategroy" resultType="java.lang.String">
+
+        select name from ps_category where id in ${cid}
+    </select>
+    <update id="updateVideoStatus">
+
+        UPDATE ps_pay_video SET home_show =#{status} WHERE id =#{id}
+
+    </update>
+    <select id="getFileUrl" resultType="java.lang.String">
+        SELECT a_src FROM ps_accessory LEFT JOIN ps_pay_video ON ps_pay_video.`fj_id`= ps_accessory.id WHERE ps_pay_video.id = #{id}
+        AND ps_pay_video.`show_status` =1 AND ps_accessory.`show_status` =1
+    </select>
+    <select id="getFileId" resultType="java.lang.Integer">
+
+        SELECT fj_id  FROM ps_pay_video WHERE id = #{id} AND show_status =1
+
+    </select>
+
+
+</mapper>

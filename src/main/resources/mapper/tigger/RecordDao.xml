@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.tigger.dao.RecordDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.tigger.entity.RecordEntity" id="recordMap">
+        <result property="id" column="id"/>
+        <result property="uId" column="u_id"/>
+        <result property="message" column="message"/>
+        <result property="showStatus" column="show_status"/>
+        <result property="boosId" column="boos_id"/>
+    </resultMap>
+    <select id="getOrganStudent" resultType="io.renren.modules.tigger.entity.vo.RecordVo">
+SELECT ps_record.`u_id` , ps_shop_user.`iphone`,ps_shop_user.`ps_username`,ps_organ.`username`,ps_record.`message`,ps_record.id,ps_record.`boos_id` FROM ps_record LEFT JOIN ps_organ ON ps_organ.id = ps_record.`boos_id`
+LEFT JOIN ps_shop_user ON ps_record.`u_id` =ps_shop_user.`id` WHERE ps_organ.id = #{id}
+    </select>
+
+
+</mapper>

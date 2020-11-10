@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.tigger.dao.ShopUserDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.tigger.entity.ShopUserEntity" id="shopUserMap">
+        <result property="id" column="id"/>
+        <result property="psUsername" column="ps_username"/>
+        <result property="psPassword" column="ps_password"/>
+        <result property="point" column="point"/>
+        <result property="recommend" column="recommend"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="balance" column="balance"/>
+        <result property="createTime" column="create_time"/>
+        <result property="showStatus" column="show_status"/>
+    </resultMap>
+
+    <select id="selectShopUserVo" resultType="io.renren.modules.tigger.entity.vo.ShopUserVo">
+        SELECT id,ps_username,POINT,recommend,balance,create_time,shop_vip,user_rock,(SELECT ps_username FROM ps_shop_user WHERE  ps_shop_user.id=pu.parent_id  AND show_status = 1) AS parentName  FROM ps_shop_user pu
+        WHERE show_status = 1
+    </select>
+</mapper>

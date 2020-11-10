@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.tigger.dao.OrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.tigger.entity.OrderEntity" id="orderMap">
+        <result property="id" column="id"/>
+        <result property="oCode" column="o_code"/>
+        <result property="uId" column="u_id"/>
+        <result property="cId" column="c_id"/>
+        <result property="oMoney" column="o_money"/>
+        <result property="numbers" column="numbers"/>
+        <result property="uAddress" column="u_address"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="showStatus" column="show_status"/>
+    </resultMap>
+
+    <select id="selectOrderVo" resultType="io.renren.modules.tigger.entity.vo.OrderVo" >
+        SELECT o_code,o_money,pay_status,pay_type,`ps_shop_user`.`ps_username` AS userName,`ps_comment`.`com_name` AS productName,`ps_address`.`u_address`AS address,`ps_order`.numbers,
+        `ps_address`.iphone,`ps_address`.`username` as adusername
+        FROM `ps_order`
+        LEFT JOIN `ps_shop_user` ON   `ps_shop_user`.`id` = `ps_order`.`u_id`
+        LEFT JOIN `ps_comment` ON `ps_comment`.`id` = `ps_order`.`c_id`
+        LEFT JOIN `ps_address` ON `ps_address`.id = `ps_order`.`u_address`
+        WHERE `ps_order` .show_status = 1
+        <if test="orderDTO.key!='' and orderDTO.key !=null ">
+            and ps_shop_user.`ps_username`  like concat('%',#{orderDTO.key},'%')
+        </if>
+        <if test="orderDTO.payType !='' and orderDTO.payType !=null ">
+            and pay_type = #{orderDTO.payType}
+        </if>
+        <if test="orderDTO.payStatus !='' and orderDTO.payStatus !=null ">
+            and pay_status = #{orderDTO.payStatus}
+        </if>
+
+    </select>
+</mapper>

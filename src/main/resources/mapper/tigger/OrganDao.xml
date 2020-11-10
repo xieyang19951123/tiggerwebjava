@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.renren.modules.tigger.dao.OrganDao">
+
+    <select id="selectOragnVo" resultType="io.renren.modules.tigger.entity.vo.OragnVo">
+
+SELECT ps_organ.*,ps_accessory.`a_src` AS image  FROM ps_organ LEFT JOIN ps_accessory ON ps_accessory.id = ps_organ.`image_id`
+WHERE ps_organ.`show_status`=1
+    </select>
+</mapper>
